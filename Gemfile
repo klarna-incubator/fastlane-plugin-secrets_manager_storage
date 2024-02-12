@@ -5,9 +5,6 @@ gem "pry"
 gem "rake"
 gem "rspec"
 gem "rspec_junit_formatter"
-gem "rubocop", "1.50.2"
-gem "rubocop-performance"
-gem "rubocop-require_tools"
 gem "simplecov"
 
 # Necessary gems for prettier formatting

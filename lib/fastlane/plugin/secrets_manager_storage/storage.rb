@@ -104,9 +104,9 @@ module Fastlane
 
           secret_names.each do |name|
             secret = @client.get_secret_value({ secret_id: name })
-            filename = File.join(self.working_directory, name.gsub(self.path_prefix, ""))
+            filename = File.join(self.working_directory, name.delete_prefix(self.path_prefix))
             FileUtils.mkdir_p(File.dirname(filename))
-            File.binwrite(filename, secret.secret_binary)
+            IO.binwrite(filename, secret.secret_binary)
           end
         end
 
@@ -159,7 +159,7 @@ module Fastlane
           #
 
           # We also remove the trailing `/`
-          secret_name = current_file.gsub(self.working_directory, "")
+          secret_name = current_file.delete_prefix(self.working_directory)
           UI.verbose("Uploading '#{secret_name}' to AWS Secrets Manager...")
           create_or_update_secret(current_file, secret_name)
         end
@@ -167,7 +167,7 @@ module Fastlane
 
       def delete_files(files_to_delete: [], custom_message: nil)
         files_to_delete.each do |current_file|
-          secret_name = current_file.gsub(self.working_directory + "/", "")
+          secret_name = current_file.delete_prefix(self.working_directory + "/")
 
           delete_secret(secret_name)
         end
@@ -193,7 +193,7 @@ module Fastlane
           UI.verbose("Secret '#{secret_name}' already exists, updating...")
           @client.put_secret_value(
             secret_id: full_secret_path,
-            secret_binary: File.open(current_file, "rb").read,
+            secret_binary: IO.binread(current_file),
           )
         rescue Aws::SecretsManager::Errors::ResourceNotFoundException
           UI.verbose("Secret '#{secret_name}' doesn't exist, creating...")

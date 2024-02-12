@@ -1,46 +1,60 @@
-# Project Name
-> Short blurb about what your project does.
+# Secrets Manager Storage
 
-[![Build Status][ci-image]][ci-url]
-[![License][license-image]][license-url]
+This plugin enables Fastlane users to store their provisioning profiles and certificates securely in
+AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane match.
+
+[![Build Status][ci-image]][ci-url] [![License][license-image]][license-url]
 [![Developed at Klarna][klarna-image]][klarna-url]
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-secrets_manager_storage)
 
+Reasons to use this (compared to the git or s3 backend):
 
-One to two paragraph statement about your project and what it does.
+- certificates are stored securley (always encrypted) by default
+- all access is controlled via AWS IAM and is fine-grained:
+  - users can be granted access to review the secret's metadata separate from the ability to read
+    the actual, unencrypted values
+  - no need to manage a `MATCH_PASSWORD` – just use your existing AWS access controls
+- all access to the decrypted secrets is logged into AWS CloudTrail, providing an audit-trail to
+  access
+- Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
+  age by using the secret's version metadata (e.g. Created On)
 
-## First steps
+> :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This
+> means that using a Matchfile or `fastlane match` commands will not work with this storage backing.
+> We're happy to take contributions but we've always ended up writing Fastlane actions in our
+> projects anyway (not using the `match` commands or `Matchfile`)
 
-<details>
- <summary>Installation (for Admins)</summary>
-  
-  Currently, new repositories can be created only by a Klarna Open Source community lead. Please reach out to us if you need assistance.
-  
-  1. Create a new repository by clicking ‘Use this template’ button.
-  
-  2. Make sure your newly created repository is private.
-  
-  3. Enable Dependabot alerts in your candidate repo settings under Security & analysis. You need to enable ‘Allow GitHub to perform read-only analysis of this repository’ first.
-</details>
+## Getting Started
 
-1. Update `README.md` and `CHANGELOG.md`.
+This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with
+`fastlane-plugin-secrets_manager_storage`, add it to your project by running:
 
-2. Optionally, clone [the default contributing guide](https://github.com/klarna-incubator/.github/blob/main/CONTRIBUTING.md) into `.github/CONTRIBUTING.md`.
+```bash
+fastlane add_plugin secrets_manager_storage
+```
 
-3. Do *not* edit `LICENSE`.
+You will then need to modify your Fastfile to have actions which use match/sync_code_signing use the
+`secrets_manager` storage backend. You can look in [fastlane/Fastfile](fastlane/Fastfile) in this
+repository for example use.
 
-## Usage example
+You will need to ensure that you have properly configured the environment to be able to access
+Secrets Manager. If you use IAM Users then you may want to set `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY_ID` appropriately. AWS documentation
+[explains how credentials are loaded](https://docs.aws.amazon.com/sdk-for-ruby/v3/developer-guide/setup-config.html).
 
-A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially more screenshots.
+## Formatting
 
-_For more examples and usage, please refer to the [Docs](TODO)._
+This project is formatted using Prettier. Simply run `rake prettier' to format
+
+```
+rake prettier
+```
 
 ## Development setup
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
 ```sh
-make install
-npm test
+bundle install
+yarn install
 ```
 
 ## How to contribute
@@ -51,17 +65,23 @@ See our guide on [contributing](.github/CONTRIBUTING.md).
 
 See our [changelog](CHANGELOG.md).
 
+## About _fastlane_
+
+_fastlane_ is the easiest way to automate beta deployments and releases for your iOS and Android
+apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
+
 ## License
 
-Copyright © 2022 Klarna Bank AB
+Copyright © 2024 Klarna Bank AB
 
 For license details, see the [LICENSE](LICENSE) file in the root of this project.
 
-
 <!-- Markdown link & img dfn's -->
+
 [ci-image]: https://img.shields.io/badge/build-passing-brightgreen?style=flat-square
 [ci-url]: https://github.com/klarna-incubator/TODO
 [license-image]: https://img.shields.io/badge/license-Apache%202-blue?style=flat-square
 [license-url]: http://www.apache.org/licenses/LICENSE-2.0
-[klarna-image]: https://img.shields.io/badge/%20-Developed%20at%20Klarna-black?style=flat-square&labelColor=ffb3c7&logo=klarna&logoColor=black
+[klarna-image]:
+  https://img.shields.io/badge/%20-Developed%20at%20Klarna-black?style=flat-square&labelColor=ffb3c7&logo=klarna&logoColor=black
 [klarna-url]: https://klarna.github.io

@@ -1,4 +1,4 @@
-# Project Name
+# Secrets Manager Storage
 
 This plugin enables Fastlane users to store their provisioning profiles and certificates securely in
 AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane match.
@@ -11,18 +11,18 @@ AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane ma
 Reasons to use this (compared to the git or s3 backend):
 
 - certificates are stored securley (always encrypted) by default
-- all access is controlled via AWS IAM and fine-grained
-  - users can be granted access to review the Secret's metadata separate from the ability to read
+- all access is controlled via AWS IAM and is fine-grained:
+  - users can be granted access to review the secret's metadata separate from the ability to read
     the actual, unencrypted values
-  - no need to manage a `MATCH_PASSWORD` – just use how you already control access to AWS
+  - no need to manage a `MATCH_PASSWORD` – just use your existing AWS access controls
 - all access to the decrypted secrets is logged into AWS CloudTrail, providing an audit-trail to
   access
 - Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
-  age
+  age by using the secret's version metadata (e.g. Created On)
 
-**NOTE**: Fastlane plugins are only automatically loaded when using a Fastfile. This means that
-using a Matchfile or `fastlane match` commands will not work with this storage backing. I'm happy to
-take contributions but I've always ended up writing Fastlane actions in my projects anyway.
+> :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This means that
+> using a Matchfile or `fastlane match` commands will not work with this storage backing. We're happy to
+> take contributions but we've always ended up writing Fastlane actions in our projects anyway (not using the `match` commands or `Matchfile`)
 
 ## Getting Started
 
@@ -67,7 +67,7 @@ apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
 
 ## License
 
-Copyright © 2022 Klarna Bank AB
+Copyright © 2024 Klarna Bank AB
 
 For license details, see the [LICENSE](LICENSE) file in the root of this project.
 

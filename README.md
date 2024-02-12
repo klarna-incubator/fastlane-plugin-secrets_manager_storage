@@ -37,6 +37,11 @@ You will then need to modify your Fastfile to have actions which use match/sync_
 `secrets_manager` storage backend. You can look in [fastlane/Fastfile](fastlane/Fastfile) in this
 repository for example use.
 
+You will need to ensure that you have properly configured the environment to be able to access
+Secrets Manager. If you use IAM Users then you may want to set `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY_ID` appropriately. AWS documentation
+[explains how credentials are loaded](https://docs.aws.amazon.com/sdk-for-ruby/v3/developer-guide/setup-config.html).
+
 ## Formatting
 
 This project is formatted using Prettier. Simply run `rake prettier' to format

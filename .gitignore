@@ -1,2 +1,4 @@
 pkg/*
 node_modules
+fastlane/report.xml
+fastlane/README.md

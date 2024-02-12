@@ -18,6 +18,7 @@ Reasons to use this (compared to the git or s3 backend):
   access
 - Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
   age by using the secret's version metadata (e.g. Created On)
+  - certificates and mobileprovision Secrets will be tagged with `ExpiresOn` and other metadata
 
 > :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This
 > means that using a Matchfile or `fastlane match` commands will not work with this storage backing.

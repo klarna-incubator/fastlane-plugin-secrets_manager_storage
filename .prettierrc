@@ -1,0 +1,16 @@
+{
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "proseWrap": "always",
+  "overrides": [
+    {
+      "files": "**/*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ],
+  "plugins": ["@prettier/plugin-ruby"]
+}

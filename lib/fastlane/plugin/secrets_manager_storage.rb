@@ -7,9 +7,10 @@ Match::Storage.register_backend(
 )
 Match::Encryption.register_backend(type: "secrets_manager") { nil }
 
+# Fastlane will complain if a plugin doesn't include any actions. Thus, we have to include an action in the right way
+# so it won't complain
 module Fastlane
   module SecretsManagerStorage
-    # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
       Dir[File.expand_path("**/{actions}/*.rb", File.dirname(__FILE__))]
     end

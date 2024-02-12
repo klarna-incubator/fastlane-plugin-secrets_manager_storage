@@ -3,8 +3,7 @@
 This plugin enables Fastlane users to store their provisioning profiles and certificates securely in
 AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane match.
 
-[![Build Status][ci-image]][ci-url]
-[![License][license-image]][license-url]
+[![Build Status][ci-image]][ci-url] [![License][license-image]][license-url]
 [![Developed at Klarna][klarna-image]][klarna-url]
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-secrets_manager_storage)
 
@@ -20,9 +19,10 @@ Reasons to use this (compared to the git or s3 backend):
 - Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
   age by using the secret's version metadata (e.g. Created On)
 
-> :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This means that
-> using a Matchfile or `fastlane match` commands will not work with this storage backing. We're happy to
-> take contributions but we've always ended up writing Fastlane actions in our projects anyway (not using the `match` commands or `Matchfile`)
+> :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This
+> means that using a Matchfile or `fastlane match` commands will not work with this storage backing.
+> We're happy to take contributions but we've always ended up writing Fastlane actions in our
+> projects anyway (not using the `match` commands or `Matchfile`)
 
 ## Getting Started
 
@@ -71,11 +71,12 @@ Copyright © 2024 Klarna Bank AB
 
 For license details, see the [LICENSE](LICENSE) file in the root of this project.
 
-
 <!-- Markdown link & img dfn's -->
+
 [ci-image]: https://img.shields.io/badge/build-passing-brightgreen?style=flat-square
 [ci-url]: https://github.com/klarna-incubator/TODO
 [license-image]: https://img.shields.io/badge/license-Apache%202-blue?style=flat-square
 [license-url]: http://www.apache.org/licenses/LICENSE-2.0
-[klarna-image]: https://img.shields.io/badge/%20-Developed%20at%20Klarna-black?style=flat-square&labelColor=ffb3c7&logo=klarna&logoColor=black
+[klarna-image]:
+  https://img.shields.io/badge/%20-Developed%20at%20Klarna-black?style=flat-square&labelColor=ffb3c7&logo=klarna&logoColor=black
 [klarna-url]: https://klarna.github.io

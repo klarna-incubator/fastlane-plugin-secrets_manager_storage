@@ -1,46 +1,55 @@
 # Project Name
-> Short blurb about what your project does.
+
+This plugin enables Fastlane users to store their provisioning profiles and certificates securely in
+AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane match.
 
 [![Build Status][ci-image]][ci-url]
 [![License][license-image]][license-url]
 [![Developed at Klarna][klarna-image]][klarna-url]
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-secrets_manager_storage)
 
+Reasons to use this (compared to the git or s3 backend):
 
-One to two paragraph statement about your project and what it does.
+- certificates are stored securley (always encrypted) by default
+- all access is controlled via AWS IAM and fine-grained
+  - users can be granted access to review the Secret's metadata separate from the ability to read
+    the actual, unencrypted values
+  - no need to manage a `MATCH_PASSWORD` – just use how you already control access to AWS
+- all access to the decrypted secrets is logged into AWS CloudTrail, providing an audit-trail to
+  access
+- Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
+  age
 
-## First steps
+**NOTE**: Fastlane plugins are only automatically loaded when using a Fastfile. This means that
+using a Matchfile or `fastlane match` commands will not work with this storage backing. I'm happy to
+take contributions but I've always ended up writing Fastlane actions in my projects anyway.
 
-<details>
- <summary>Installation (for Admins)</summary>
-  
-  Currently, new repositories can be created only by a Klarna Open Source community lead. Please reach out to us if you need assistance.
-  
-  1. Create a new repository by clicking ‘Use this template’ button.
-  
-  2. Make sure your newly created repository is private.
-  
-  3. Enable Dependabot alerts in your candidate repo settings under Security & analysis. You need to enable ‘Allow GitHub to perform read-only analysis of this repository’ first.
-</details>
+## Getting Started
 
-1. Update `README.md` and `CHANGELOG.md`.
+This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with
+`fastlane-plugin-secrets_manager_storage`, add it to your project by running:
 
-2. Optionally, clone [the default contributing guide](https://github.com/klarna-incubator/.github/blob/main/CONTRIBUTING.md) into `.github/CONTRIBUTING.md`.
+```bash
+fastlane add_plugin secrets_manager_storage
+```
 
-3. Do *not* edit `LICENSE`.
+You will then need to modify your Fastfile to have actions which use match/sync_code_signing use the
+`secrets_manager` storage backend. You can look in [fastlane/Fastfile](fastlane/Fastfile) in this
+repository for example use.
 
-## Usage example
+## Formatting
 
-A few motivating and useful examples of how your project can be used. Spice this up with code blocks and potentially more screenshots.
+This project is formatted using Prettier. Simply run `rake prettier' to format
 
-_For more examples and usage, please refer to the [Docs](TODO)._
+```
+rake prettier
+```
 
 ## Development setup
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
 ```sh
-make install
-npm test
+bundle install
+yarn install
 ```
 
 ## How to contribute
@@ -50,6 +59,11 @@ See our guide on [contributing](.github/CONTRIBUTING.md).
 ## Release History
 
 See our [changelog](CHANGELOG.md).
+
+## About _fastlane_
+
+_fastlane_ is the easiest way to automate beta deployments and releases for your iOS and Android
+apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
 
 ## License
 

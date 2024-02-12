@@ -1,0 +1,33 @@
+default_platform(:ios)
+
+MATCH_OPTIONS = {
+  storage_mode: "secrets_manager",
+  secrets_manager_path_prefix: "/prefix/for/all/secrets",
+  secrets_manager_tags: {
+    "MyTag" => "MyTagValue",
+  },
+  secrets_manager_region: "eu-west-1",
+  type: "enterprise", # from normal match values
+  username: "username@example.com",
+  team_id: "TEAM_ID",
+  team_name: "TEAM Name",
+  app_identifier: "the.app.identifier",
+}
+
+platform :ios do
+  lane :sync_certificates do
+    sync_code_signing(MATCH_OPTIONS.merge(readonly: true))
+  end
+
+  lane :renew_certificates do
+    sync_code_signing(MATCH_OPTIONS.merge(force: true))
+  end
+
+  lane :import_stuff do
+    Match::Importer.new.import_cert(
+      MATCH_OPTIONS.merge(readonly: true, skip_certificate_matching: true),
+      cert_path: "DISTRIBUTION_CERTIFICATE.cer",
+      p12_path: "DISTRIBUTION_CERTIFICATE.p12",
+    )
+  end
+end

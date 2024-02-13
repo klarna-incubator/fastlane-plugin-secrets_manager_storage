@@ -188,6 +188,7 @@ module Fastlane
 
       def create_or_update_secret(current_file, secret_name)
         full_secret_path = generate_secret_path(secret_name)
+        secret_specific_tags = generate_tags_for_secret(current_file)
         begin
           @client.describe_secret(secret_id: full_secret_path)
           UI.verbose("Secret '#{secret_name}' already exists, updating...")
@@ -195,12 +196,18 @@ module Fastlane
             secret_id: full_secret_path,
             secret_binary: IO.binread(current_file),
           )
+          unless secret_specific_tags.empty?
+            @client.tag_resource(
+              secret_id: full_secret_path,
+              tags: convert_hash_to_array_of_key_values(secret_specific_tags),
+            )
+          end
         rescue Aws::SecretsManager::Errors::ResourceNotFoundException
           UI.verbose("Secret '#{secret_name}' doesn't exist, creating...")
           @client.create_secret(
             name: full_secret_path,
             secret_binary: File.open(current_file, "rb").read,
-            tags: generate_tags_in_aws_format(tags),
+            tags: convert_hash_to_array_of_key_values(tags.merge(secret_specific_tags)),
           )
         end
       end
@@ -213,14 +220,47 @@ module Fastlane
 
       private
 
+      def generate_tags_for_secret(secret_file)
+        return {} unless File.file?(secret_file)
+
+        expiry = nil
+        secret_specific_tags = {}
+        case File.extname(secret_file)
+        when ".p12"
+          # not sure how to get expiry of the cert
+        when ".cer"
+          cert_info = Match::Utils.get_cert_info(secret_file)
+          secret_specific_tags["Name"] = cert_info
+            .find { |attribute| attribute.first == "Common Name" }
+            .last
+          expiry = cert_info.find { |attribute| attribute.first == "End Datetime" }.last
+        when ".mobileprovision"
+          secret_specific_tags[
+            "Name"
+          ] = `/usr/libexec/PlistBuddy -c 'Print Name' /dev/stdin <<< $(security cms -D -i "#{secret_file}")`.chomp.strip
+          secret_specific_tags[
+            "AppIDName"
+          ] = `/usr/libexec/PlistBuddy -c 'Print AppIDName' /dev/stdin <<< $(security cms -D -i "#{secret_file}")`.chomp.strip
+          secret_specific_tags[
+            "AppIdentifier"
+          ] = `/usr/libexec/PlistBuddy -c 'Print Entitlements:application-identifier' /dev/stdin <<< $(security cms -D -i "#{secret_file}")`.chomp.strip
+          expiry =
+            DateTime.parse(
+              `/usr/libexec/PlistBuddy -c 'Print ExpirationDate' /dev/stdin <<< $(security cms -D -i "#{secret_file}")`.chomp.strip,
+            )
+        end
+        secret_specific_tags["ExpiresOn"] = expiry.strftime("%Y-%m-%dT%H:%M:%SZ") if expiry
+        secret_specific_tags
+      end
+
       def generate_secret_path(secret_name)
         prefix = path_prefix
         prefix += "/" unless secret_name.start_with?("/")
         "#{prefix}#{secret_name}"
       end
 
-      def generate_tags_in_aws_format(tags)
-        tags.map { |key, value| { key: key, value: value } }
+      def convert_hash_to_array_of_key_values(tags_as_ruby_hash)
+        tags_as_ruby_hash.map { |key, value| { key: key, value: value } }
       end
 
       def with_aws_authentication_error_handling

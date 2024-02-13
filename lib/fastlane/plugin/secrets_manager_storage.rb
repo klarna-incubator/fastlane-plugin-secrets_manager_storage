@@ -23,7 +23,7 @@ Match::Options.append_option(
     description: "The prefix to be used for all Secrets Manager Secrets",
     optional: true,
     type: String,
-  )
+  ),
 )
 Match::Options.append_option(
   FastlaneCore::ConfigItem.new(
@@ -32,7 +32,7 @@ Match::Options.append_option(
     description: "tags which are used when creating a new secret in Secrets Manager",
     optional: true,
     type: Hash,
-  )
+  ),
 )
 Match::Options.append_option(
   FastlaneCore::ConfigItem.new(
@@ -41,7 +41,7 @@ Match::Options.append_option(
     description: "The prefix to be used for all Secrets Manager Secrets",
     optional: true,
     type: String,
-  )
+  ),
 )
 
 # Fastlane will complain if a plugin doesn't include any actions. Thus, we have to include an action in the right way

@@ -1,6 +1,6 @@
 # Secrets Manager Storage
 
-This plugin enables Fastlane users to store their provisioning profiles and certificates securely in
+This plugin enables Fastlane users to store their provisioning profiles and signing keys securely in
 AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane match.
 
 [![Build Status][ci-image]][ci-url] [![License][license-image]][license-url]
@@ -9,15 +9,15 @@ AWS Secrets Manager by adding a `secrets_manager` storage backend to Fastlane ma
 
 Reasons to use this (compared to the git or s3 backend):
 
-- certificates are stored securley (always encrypted) by default
+- your signing keys are stored securley (always encrypted) by default
 - all access is controlled via AWS IAM and is fine-grained:
   - users can be granted access to review the secret's metadata separate from the ability to read
     the actual, unencrypted values
   - no need to manage a `MATCH_PASSWORD` – just use your existing AWS access controls
-- all access to the decrypted secrets is logged into AWS CloudTrail, providing an audit-trail to
-  access
+- all access to the decrypted keys is logged into AWS CloudTrail, providing an audit-trail to access
 - Secret lifecycle can be tracked independently of Fastlane, enabling you to have alerts on secret
-  age by using the secret's version metadata (e.g. Created On)
+  age by using the secret's version metadata (e.g. Created On). **This is interesting because Apple
+  provides no means of being notified about certificate expiration**.
   - certificates and mobileprovision Secrets will be tagged with `ExpiresOn` and other metadata
 
 > :information_source: Fastlane plugins are only automatically loaded when using a Fastfile. This

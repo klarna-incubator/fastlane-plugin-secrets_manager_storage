@@ -233,6 +233,7 @@ module Fastlane
           secret_specific_tags["Name"] = cert_info
             .find { |attribute| attribute.first == "Common Name" }
             .last
+            .gsub(/[^a-zA-Z0-9_ .:\/=+-]/, "")
           expiry = cert_info.find { |attribute| attribute.first == "End Datetime" }.last
         when ".mobileprovision"
           secret_specific_tags[
